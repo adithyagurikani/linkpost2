@@ -59,8 +59,10 @@ export async function callback(req: Request, res: Response) {
   const { code, state } = req.query;
 
   if (!code || !state) {
+    const errorParam = req.query.error ? `&li_error=${req.query.error}` : '';
+    const errorDesc = req.query.error_description ? `&li_desc=${encodeURIComponent(req.query.error_description as string)}` : '';
     return res.redirect(
-      `${env.FRONTEND_URL}/accounts?error=missing_params`
+      `${env.FRONTEND_URL}/accounts?error=missing_params${errorParam}${errorDesc}`
     );
   }
 
