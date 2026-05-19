@@ -1,0 +1,48 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - link "AutoPost" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - img [ref=e7]
+      - text: AutoPost
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "Welcome back" [level=1] [ref=e11]
+        - paragraph [ref=e12]: Access your automation hub.
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - text: Username or Email
+          - generic [ref=e15]:
+            - img [ref=e17]
+            - textbox "Username or Email" [ref=e20]:
+              - /placeholder: Enter your username
+        - generic [ref=e21]:
+          - generic [ref=e22]:
+            - text: Password
+            - link "Forgot password?" [ref=e23] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=e24]:
+            - img [ref=e26]
+            - textbox "Password" [ref=e29]:
+              - /placeholder: ••••••••
+        - button "Sign in to dashboard" [ref=e30]:
+          - text: Sign in to dashboard
+          - img [ref=e31]
+      - paragraph [ref=e34]:
+        - text: New to AutoPost?
+        - link "Request access" [ref=e35] [cursor=pointer]:
+          - /url: /
+    - generic [ref=e36]: © 2026 AutoPost Platform. Standard data security protocols active.
+  - generic [ref=e39]:
+    - generic [ref=e40]: Trusted by 4.5K+ Brands
+    - heading "Scaling automated dominance starts here." [level=2] [ref=e41]:
+      - text: Scaling automated
+      - text: dominance starts here.
+    - paragraph [ref=e42]: "\"AutoPost reduced my campaign overhead by 90%, allowing instant redistribution across our entire executive network concurrently.\""
+    - generic [ref=e43]:
+      - generic [ref=e44]:
+        - img "User" [ref=e46]
+        - img "User" [ref=e48]
+        - img "User" [ref=e50]
+      - generic [ref=e51]:
+        - generic [ref=e52]: Executive Collective
+        - generic [ref=e53]: User Group

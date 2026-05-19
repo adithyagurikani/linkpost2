@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InkPost — Complete User Guide</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f8f9fb;
+      color: #1e293b;
+      line-height: 1.6;
+    }
+
+    /* ─── NAV ─── */
+    .top-bar {
+      background: #1e1b4b;
+      color: #fff;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #312e81;
+    }
+    .top-bar .logo { font-weight: 800; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .top-bar .logo span { color: #a5b4fc; }
+    .top-bar nav { display: flex; gap: 6px; flex-wrap: wrap; font-size: 13px; }
+    .top-bar nav a { color: #c7d2fe; text-decoration: none; padding: 4px 10px; border-radius: 6px; }
+    .top-bar nav a:hover { background: #312e81; color: #fff; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, #1e1b4b 0%, #3730a3 100%);
+      color: #fff;
+      padding: 60px 24px 50px;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; }
+    .hero p { max-width: 640px; margin: 12px auto 0; opacity: .85; font-size: 17px; }
+    .hero .badge { display: inline-block; background: #6366f1; padding: 4px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 14px; }
+
+    /* ─── CONTAINER ─── */
+    .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* ─── TABLE OF CONTENTS ─── */
+    .toc { background: #fff; border-radius: 12px; padding: 28px 32px; box-shadow: 0 1px 3px rgba(0,0,0,.06); margin-bottom: 40px; }
+    .toc h2 { margin-bottom: 14px; }
+    .toc ol { columns: 2; column-gap: 32px; list-style-position: inside; }
+    .toc li { margin-bottom: 5px; font-size: 14px; }
+    .toc a { color: #4f46e5; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    /* ─── SECTION ─── */
+    section { margin-bottom: 48px; scroll-margin-top: 72px; }
+    section h2 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 3px solid #6366f1;
+      display: inline-block;
+    }
+    section h3 { font-size: 18px; font-weight: 600; margin: 24px 0 10px; color: #4338ca; }
+    section p, section li { font-size: 15px; color: #475569; }
+    section ul, section ol { padding-left: 22px; margin: 8px 0 14px; }
+    section li { margin-bottom: 4px; }
+    section .note {
+      background: #eef2ff;
+      border-left: 4px solid #6366f1;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin: 14px 0;
+    }
+    section .warn {
+      background: #fef3c7;
+      border-left-color: #f59e0b;
+    }
+
+    /* ─── WIREFRAMES ─── */
+    .wf-grid { display: grid; gap: 24px; margin: 18px 0; }
+    .wf-grid.two { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+    .wf-grid.three { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .wf-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .wf-card .wf-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: 8px 14px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .wf-card .wf-label span { float: right; color: #94a3b8; font-weight: 400; }
+    .wf-body { padding: 14px; }
+    .wf-body pre { font-size: 11px; line-height: 1.4; color: #475569; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+
+    /* ─── SECTIONS TABLE ─── */
+    .sectable { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+    .sectable th { background: #f1f5f9; text-align: left; padding: 8px 12px; font-weight: 600; border-bottom: 2px solid #e2e8f0; }
+    .sectable td { padding: 7px 12px; border-bottom: 1px solid #f1f5f9; }
+    .sectable td:first-child { font-weight: 500; color: #4338ca; white-space: nowrap; }
+
+    /* ─── STATUS PILLS ─── */
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .pill-draft { background: #f1f5f9; color: #475569; }
+    .pill-scheduled { background: #dbeafe; color: #1d4ed8; }
+    .pill-queued { background: #fef3c7; color: #b45309; }
+    .pill-posting { background: #e0e7ff; color: #4338ca; }
+    .pill-posted { background: #d1fae5; color: #059669; }
+    .pill-failed { background: #fee2e2; color: #dc2626; }
+
+    /* ─── FLOW DIAGRAM ─── */
+    .flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; margin: 18px 0; }
+    .flow .step { background: #fff; border: 2px solid #e2e8f0; border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 500; }
+    .flow .step.done { border-color: #6366f1; background: #eef2ff; }
+    .flow .arrow { color: #94a3b8; font-size: 18px; }
+
+    /* ─── FOOTER ─── */
+    footer { text-align: center; padding: 32px 24px; color: #94a3b8; font-size: 13px; border-top: 1px solid #e2e8f0; }
+
+    @media (max-width: 640px) {
+      .top-bar nav { display: none; }
+      .toc ol { columns: 1; }
+      .wf-grid.two { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ TOP NAV ═══════════════ -->
+<div class="top-bar">
+  <div class="logo"><span>✦</span> InkPost</div>
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#posts">Posts</a>
+    <a href="#schedules">Schedules</a>
+    <a href="#sources">Sources</a>
+    <a href="#planner">Planner</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#accounts">Accounts</a>
+  </nav>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<div class="hero">
+  <div class="badge">v1.0 &middot; LinkedIn Auto-Posting System</div>
+  <h1>InkPost &mdash; Complete User Guide</h1>
+  <p>Schedule, generate, and auto-publish LinkedIn content from imported sources, recurring schedules, or AI-powered planning &mdash; all in one place.</p>
+</div>
+
+<div class="container">
+
+<!-- ═══════════════ TOC ═══════════════ -->
+<div class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#overview">Overview &amp; Architecture</a></li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#dashboard">Dashboard</a></li>
+    <li><a href="#accounts">LinkedIn Accounts</a></li>
+    <li><a href="#sources">Content Sources</a></li>
+    <li><a href="#posts">Posts</a></li>
+    <li><a href="#schedules">Recurring Schedules</a></li>
+    <li><a href="#planner">Schedule Planner</a></li>
+    <li><a href="#calendar">Calendar View</a></li>
+    <li><a href="#analytics">Analytics</a></li>
+    <li><a href="#brief">AI Brief</a></li>
+    <li><a href="#logs">Audit Logs</a></li>
+    <li><a href="#settings">Settings &amp; AI Prompts</a></li>
+    <li><a href="#status-lifecycle">Post Status Lifecycle</a></li>
+    <li><a href="#faq">FAQ &amp; Troubleshooting</a></li>
+  </ol>
+</div>
+
+<!-- ═══════════════ 1. OVERVIEW ═══════════════ -->
+<section id="overview">
+  <h2>1. Overview &amp; Architecture</h2>
+  <p>InkPost is a full-stack web application that helps you create, schedule, and automatically publish LinkedIn posts. It connects your LinkedIn account(s), imports content from text/CSV/JSON files, uses AI to generate and refine posts, and runs on a cron schedule to publish at your chosen times.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Tech Stack</div>
+      <div class="wf-body">
+        <pre>
+Frontend:     Next.js 15.3 (App Router) + React 19
+Backend:      Express.js 5 REST API Gateway
+Database:     MongoDB Atlas (MongoClient singleton)
+Auth:         JWT (custom React context, access/refresh tokens)
+LinkedIn:     OAuth 2.0 + Community Management API
+AI:           OpenCode Free Cloud AI (opencode.ai/zen/v1)
+Charts:       Recharts (AreaChart, BarChart)
+Styling:      Tailwind CSS v4
+Cron:         node-cron (retry 2min, fast 15min, slow on schedule)</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Provider Tree</div>
+      <div class="wf-body">
+        <pre>
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;AuthProvider&gt;          ← JWT context (access/refresh)
+      &lt;ToastProvider&gt;        ← Toast notifications
+        &lt;ConfirmProvider&gt;    ← Confirm dialogs
+          &lt;Nav /&gt;            ← Sticky top nav
+          {children}          ← Page content
+        &lt;/ConfirmProvider&gt;
+      &lt;/AuthProvider&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Cron Pipeline (3x daily)</div>
+      <div class="wf-body">
+        <div class="flow">
+          <span class="step done">Optimize Tags</span>
+          <span class="arrow">→</span>
+          <span class="step done">Publish Due</span>
+          <span class="arrow">→</span>
+          <span class="step done">Process Schedules</span>
+          <span class="arrow">→</span>
+          <span class="step done">Sync Analytics</span>
+        </div>
+        <pre>
+1. batchOptimizeTags(25)   — Auto-generate hashtags for scheduled/queued posts
+2. postOneDue(6, 25)       — Publish due posts to LinkedIn (with AI quality gate)
+3. processSchedules()      — Create new posts from recurring schedule templates/drafts
+4. runAnalyticsCycle(30)   — Sync engagement metrics for recently posted</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">MongoDB Collections</div>
+      <div class="wf-body">
+        <pre>
+users          — User accounts (username + bcrypt hash)
+accounts       — LinkedIn OAuth connections
+posts          — All posts (drafts → posted/failed)
+schedules      — Recurring posting schedules
+contentSources — Imported content libraries
+auditLogs      — System audit trail
+settings       — App settings + AI prompt overrides</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>AI Note:</strong> All AI features use free OpenCode models (<code>nemotron-3-super-free</code>, <code>ring-2.6-1t-free</code>, <code>minimax-m2.5-free</code>). No API key is required. The system automatically retries on rate limits with fallback models.
+  </div>
+</section>
+
+<!-- ═══════════════ 2. GETTING STARTED ═══════════════ -->
+<section id="getting-started">
+  <h2>2. Getting Started</h2>
+
+  <h3>2.1 Registration &amp; Login</h3>
+  <p>Navigate to <code>/register</code> to create an account. Enter a username and password. You'll be automatically logged in after registration. Existing users go to <code>/login</code>.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Login Screen <span>/login</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║        ✦ InkPost           ║
+║                              ║
+║   ┌──────────────────────┐   ║
+║   │  Username            │   ║
+║   └──────────────────────┘   ║
+║   ┌──────────────────────┐   ║
+║   │  Password            │   ║
+║   └──────────────────────┘   ║
+║                              ║
+║   [ ─── Sign In ─── ]       ║
+║                              ║
+║   Don't have an account?     ║
+║        Register here         ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Register Screen <span>/register</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║        ✦ InkPost           ║
+║                              ║
+║   ┌──────────────────────┐   ║
+║   │  Username            │   ║
+║   └──────────────────────┘   ║
+║   ┌──────────────────────┐   ║
+║   │  Password            │   ║
+║   └──────────────────────┘   ║
+║   ┌──────────────────────┐   ║
+║   │  Confirm Password    │   ║
+║   └──────────────────────┘   ║
+║                              ║
+║   [ ─── Register ─── ]      ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>2.2 Connect a LinkedIn Account</h3>
+  <p>After logging in, go to <strong>Accounts</strong> in the navigation bar and click <strong>"Add LinkedIn Account"</strong>. You'll be redirected to LinkedIn's OAuth authorization page. Approve the requested permissions, and you'll be redirected back.</p>
+
+  <div class="note warn">
+    <strong>Important:</strong> The LinkedIn OAuth app must have the <code>w_member_social_feed</code> scope enabled in the LinkedIn Developer Portal. If you see 403 errors on analytics, disconnect and reconnect your account.
+  </div>
+
+  <h3>2.3 Quick Start Flow</h3>
+  <div class="flow">
+    <span class="step done">1. Register</span>
+    <span class="arrow">→</span>
+    <span class="step done">2. Add LinkedIn</span>
+    <span class="arrow">→</span>
+    <span class="step done">3. Import Content</span>
+    <span class="arrow">→</span>
+    <span class="step done">4. Schedule Posts</span>
+    <span class="arrow">→</span>
+    <span class="step done">5. Auto-Publish</span>
+  </div>
+</section>
+
+<!-- ═══════════════ 3. DASHBOARD ═══════════════ -->
+<section id="dashboard">
+  <h2>3. Dashboard</h2>
+  <p>The landing page after login. Shows a summary of your account status, post statistics, upcoming scheduled posts, and connected accounts.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Dashboard <span>/dashboard</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Dashboard                   ║
+║  Your command center          ║
+║                               ║
+║  ┌──────┐ ┌──────┐ ┌──────┐  ║
+║  │Total │ │Posted│ │Sched │  ║
+║  │ 104  │ │  9   │ │  92  │  ║
+║  └──────┘ └──────┘ └──────┘  ║
+║                         ┌──┐  ║
+║                         │F │  ║
+║   [ 📋 Brief Me ]      │ 3│  ║
+║                         └──┘  ║
+║  ─── Upcoming Queue ───       ║
+║  │ 5/14 08:00  Post A    │   ║
+║  │ 5/14 12:00  Post B    │   ║
+║  │ 5/15 08:00  Post C    │   ║
+║                               ║
+║  ─── Accounts ───             ║
+║  ◎ John Doe [Active]         ║
+║  ─── System ───               ║
+║  [Optimizer]  [SyncAnalytics] ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Features</div>
+      <div class="wf-body">
+        <ul>
+          <li><strong>Stats Cards</strong> — Total, Posted, Scheduled, Failed counts</li>
+          <li><strong>Upcoming Queue</strong> — Next 5 scheduled posts with dates/times</li>
+          <li><strong>Brief Me</strong> — AI-generated activity summary (opens modal)</li>
+          <li><strong>Connected Accounts</strong> — Active LinkedIn profiles</li>
+          <li><strong>System Tasks</strong> — Manual triggers for tag optimization &amp; analytics sync</li>
+          <li><strong>Integrity Card</strong> — Quick health check of your setup</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 4. ACCOUNTS ═══════════════ -->
+<section id="accounts">
+  <h2>4. LinkedIn Accounts</h2>
+  <p>Manage your connected LinkedIn profiles. You can connect multiple accounts and post to any combination of them.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Accounts Page <span>/accounts</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Accounts  [+ Add LinkedIn] ║
+║  Manage your connections      ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │  👤 John Doe           │   ║
+║  │  linkedin.com/in/john  │   ║
+║  │  ● Active              │   ║
+║  │  Token expires in 45d  │   ║
+║  │                        │   ║
+║  │  [Deactivate] [Remove] │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │  👤 Jane Smith         │   ║
+║  │  linkedin.com/in/jane  │   ║
+║  │  ○ Inactive            │   ║
+║  │  ⚠ Expires in 3 days  │   ║
+║  │                        │   ║
+║  │  [Activate] [Remove]   │   ║
+║  └────────────────────────┘   ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">How to Connect</div>
+      <div class="wf-body">
+        <ol>
+          <li>Click <strong>"Add LinkedIn Account"</strong></li>
+          <li>You're redirected to LinkedIn's OAuth page</li>
+          <li>Log in to LinkedIn and approve the permissions</li>
+          <li>You're redirected back — the account appears in your list</li>
+          <li>Use the <strong>Activate/Deactivate</strong> toggle to enable/disable posting</li>
+          <li><strong>Remove</strong> disconnects the account (after confirmation)</li>
+        </ol>
+        <br/>
+        <div class="note warn">
+          <strong>⚠ Token Expiry:</strong> LinkedIn tokens expire after ~60 days. Accounts show a warning 7 days before expiry. Disconnect and reconnect to refresh.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 5. SOURCES ═══════════════ -->
+<section id="sources">
+  <h2>5. Content Sources</h2>
+  <p>Import content from text, CSV, or JSON files. Sources act as your content library — you import them as draft posts, then schedule those drafts for publishing.</p>
+
+  <h3>5.1 Creating a Source</h3>
+  <p>Go to <strong>Sources → Create Source</strong>. Give it a name and paste your content. Supported formats:</p>
+  <div class="wf-grid three">
+    <div class="wf-card">
+      <div class="wf-label">Plain Text</div>
+      <div class="wf-body"><pre>Post one per line.
+
+One line = one post.
+
+Great for simple lists.</pre></div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">JSON Array</div>
+      <div class="wf-body"><pre>[
+  { "content": "First post" },
+  { "content": "Second post" }
+]</pre></div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">CSV</div>
+      <div class="wf-body"><pre>content
+"First post content"
+"Second post content"</pre></div>
+    </div>
+  </div>
+
+  <h3>5.2 Import &amp; Schedule Flow</h3>
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Sources Page <span>/sources</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Sources  [Create] [Imp All]║
+║  Content library              ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │  📄 My Tech Posts      │   ║
+║  │  Type: JSON · 50 items │   ║
+║  │  "FastAPI in plain...  │   ║
+║  │                        │   ║
+║  │  [Edit] [Import] [Del] │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │  📄 Daily Tips         │   ║
+║  │  Type: Text · 10 items │   ║
+║  │  "Tip 1: Always..."    │   ║
+║  │                        │   ║
+║  │  [Edit] [Import] [Del] │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  After import:                ║
+║  [ Schedule All Drafts ]     ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">The Import → Schedule Workflow</div>
+      <div class="wf-body">
+        <ol>
+          <li><strong>Create Source</strong> — Name + paste content (text/JSON/CSV)</li>
+          <li><strong>Import</strong> — Click "Import Posts" on a source. Each item becomes a <span class="pill pill-draft">draft</span> post in MongoDB. <br/><em>Duplicates are automatically skipped.</em></li>
+          <li><strong>Import All</strong> — Or click "Import All" to import every active source at once</li>
+          <li><strong>Schedule Drafts</strong> — After importing, click "Schedule All Drafts". Select account, start date, posting times, and posts-per-day. Unique posts get scheduled.</li>
+        </ol>
+        <br/>
+        <div class="note">
+          <strong>Dedup:</strong> Content is normalized (whitespace-collapsed) before comparison. Duplicate posts within the same import are skipped.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>5.3 Bulk Import</h3>
+  <p>The <strong>Bulk Import</strong> feature (via Sources page upload) accepts a JSON array. Each object should have at least a <code>content</code> field. The system auto-categorizes posts into separate sources based on keywords in the content (<em>tech, ai, business, health, finance, etc.</em>).</p>
+
+  <div class="wf-card">
+    <div class="wf-label">Bulk Import JSON Example</div>
+    <div class="wf-body">
+<pre>[
+  { "content": "FastAPI in plain English: build APIs faster..." },
+  { "content": "React 19 new features explained simply..." },
+  { "content": "AI trends 2026: what to watch..." },
+  { "content": "Startup fundraising tips for founders..." }
+]
+→ Auto-categorized into "Tech", "AI", "Business" sources</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 6. POSTS ═══════════════ -->
+<section id="posts">
+  <h2>6. Posts</h2>
+  <p>All your posts live here — drafts, scheduled, posted, and failed. You can create, edit, search, filter, and manage individual posts.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Posts Page <span>/posts</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Posts  [+ New] [Bulk Sched]║
+║  All your content             ║
+║                               ║
+║  [All][Draft][Sched][Postd]  ║     ← Tab filters
+║  ┌─ Search: _____________ ─┐  ║
+║                               ║
+║  ┌─────┬──────────────────┐  ║
+║  │     │ Post content...   │  ║
+║  │  ●  │ 📅 5/14 08:00    │  ║
+║  │     │ 👤 John Doe       │  ║
+║  │     │ [Edit] [Pub] [Del]│  ║
+║  ├─────┼──────────────────┤  ║
+║  │  ✗  │ Another post...   │  ║
+║  │     │ ⚠ Error msg...   │  ║
+║  │     │ [Edit] [Del]      │  ║
+║  └─────┴──────────────────┘  ║
+║  ◀ 1 2 3 ... 10 ▶           ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Post Form <span>/posts/new</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  New Post                    ║
+║                               ║
+║  Content                      ║
+║  ┌────────────────────────┐   ║
+║  │ Write your post...     │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  [AI: Refine] [AI: Expand]   ║
+║  [🎯 Hashtags]               ║
+║  #react #webdev #javascript   ║
+║                               ║
+║  Accounts:                    ║
+║  ☑ John Doe  ☐ Jane Smith   ║
+║                               ║
+║  Schedule: ┌──────────┐      ║
+║            │ 5/14 8AM │      ║
+║            └──────────┘      ║
+║                               ║
+║  [Save Draft] [Publish Now]  ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>6.1 Creating a Post</h3>
+  <ul>
+    <li><strong>Write content</strong> — Type or paste your LinkedIn post text</li>
+    <li><strong>AI Assist</strong> — Use "Refine" to polish, "Expand" to elaborate, or "Hashtags" to generate relevant tags (tap pills to insert)</li>
+    <li><strong>Multi-account</strong> — Check multiple LinkedIn accounts to broadcast the same post to all of them</li>
+    <li><strong>Schedule</strong> — Set a future date/time, or click "Publish Now" to go immediately</li>
+    <li><strong>Save Draft</strong> — Keep as draft for later</li>
+  </ul>
+
+  <h3>6.2 Bulk Scheduling</h3>
+  <p><strong>/posts/bulk-schedule</strong> — Upload a JSON file with an array of post content objects, select an account, set a start date, posting times, and posts-per-day. The system creates individual scheduled posts for each content item.</p>
+
+  <div class="wf-card">
+    <div class="wf-label">Bulk Schedule JSON Format</div>
+    <div class="wf-body">
+<pre>[
+  { "content": "First post content here..." },
+  { "content": "Second post content here..." },
+  { "content": "Third post content here..." }
+]
+
+Form fields:
+• Account (required)
+• Start Date
+• Posting Times (e.g. 08:00, 12:00, 18:00)
+• Posts per Day</pre>
+    </div>
+  </div>
+
+  <h3>6.3 Schedule Drafts (from Sources)</h3>
+  <p>After importing content from sources, go to the <strong>Sources</strong> page and click <strong>"Schedule All Drafts"</strong>. This:</p>
+  <ol>
+    <li>Fetches all <code>imported_asset</code> draft posts</li>
+    <li>Groups by normalized content, removes duplicates</li>
+    <li>Creates scheduled posts with your chosen account, dates, and times</li>
+    <li>Returns count of duplicates removed</li>
+  </ol>
+
+  <div class="wf-card">
+    <div class="wf-label">Schedule Drafts Form</div>
+    <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Schedule All Drafts         ║
+║                               ║
+║  Account: [ Select ▼ ]      ║
+║  Start Date: [ 5/15/2026 ]  ║
+║  Times: 08:00  12:00  18:00 ║
+║  Posts per day: [ 3 ]       ║
+║                               ║
+║  Summary: 12 posts over     ║
+║  4 days (3 posts/day)        ║
+║                               ║
+║  [Confirm & Schedule]        ║
+╚══════════════════════════════╝</pre>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 7. SCHEDULES ═══════════════ -->
+<section id="schedules">
+  <h2>7. Recurring Schedules</h2>
+  <p>Schedules are persistent timetables that create and publish posts <strong>automatically every day</strong> at specified times, using a content template with dynamic date/time placeholders.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Schedules Page <span>/schedules</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Post Recurrence  [Create]  ║
+║  Automated daily routines    ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │  Daily Tech Tips       │   ║
+║  │  Times: 08:00, 12:00   │   ║
+║  │  📅 John Doe ● Active  │   ║
+║  │  Template: "Today's    │   ║
+║  │  tip: {date}..."       │   ║
+║  │  Last: 5/13 12:00      │   ║
+║  │  Next: 5/14 08:00      │   ║
+║  │                        │   ║
+║  │  [Edit] [⏸ Pause] [Del]│   ║
+║  └────────────────────────┘   ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Schedule Form <span>/schedules/new</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Create Schedule              ║
+║                               ║
+║  Name: [ Daily Tech Tips  ] ║
+║                               ║
+║  Account: [ John Doe ▼ ]    ║
+║                               ║
+║  Posts per day: [ 2 ]       ║
+║  Times (IST):                ║
+║    1. [08:00]                ║
+║    2. [12:00]                ║
+║                               ║
+║  Topic: [AI industry news]   ║
+║  [AI Generate]               ║
+║                               ║
+║  Template:                    ║
+║  ┌────────────────────────┐   ║
+║  │ {date} AI news: ...   │   ║
+║  └────────────────────────┘   ║
+║  Use {date} and {time}       ║
+║                               ║
+║  [Create Schedule]           ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+  </div>
+
+  <h3>7.1 How Schedules Work</h3>
+  <ol>
+    <li>Create a schedule with a <strong>LinkedIn account</strong>, posting <strong>times</strong>, and a <strong>content template</strong></li>
+    <li>Your local timezone is detected automatically and stored with the schedule for accurate UTC conversion</li>
+    <li>The template can use <code>{date}</code> (current date) and <code>{time}</code> (current time) placeholders</li>
+    <li><strong>AI Generate</strong> creates a template from a topic description (e.g. "Daily AI news roundup")</li>
+    <li>Every 15 minutes the cron pipeline runs — <code>processSchedules()</code> creates new posts from active schedules</li>
+    <li>For each active schedule, it creates a new post by replacing <code>{date}</code>/<code>{time}</code> in the template</li>
+    <li>The post is saved as <span class="pill pill-scheduled">scheduled</span> with <code>source: "schedule"</code></li>
+    <li><code>postOneDue()</code> publishes it to LinkedIn at the correct time</li>
+    <li>Hashtags are auto-generated via <code>batchOptimizeTags()</code> before publishing</li>
+  </ol>
+
+  <div class="note">
+    <strong>Key:</strong> The schedule itself doesn't publish — it <strong>creates posts</strong> that are then picked up by the normal publishing pipeline. This is why you must always have <strong>at least one active LinkedIn account</strong> selected on the schedule.
+  </div>
+
+  <h3>7.2 Schedule Template Examples</h3>
+  <table class="sectable">
+    <tr><th>Template</th><th>Result (on May 14, 2026 at 08:00)</th></tr>
+    <tr><td><code>{date} update: Today's tech tip...</code></td><td>"May 14, 2026 update: Today's tech tip..."</td></tr>
+    <tr><td><code>🗓 {date} ⏰ {time} Daily thread</code></td><td>"🗓 May 14, 2026 ⏰ 08:00 AM Daily thread"</td></tr>
+    <tr><td><code>🚀 AWS Tip #{time} — {date}</code></td><td>"🚀 AWS Tip #08:00 — May 14, 2026"</td></tr>
+  </table>
+
+  <h3>7.3 Pause / Resume</h3>
+  <p>Use the <strong>Pause</strong> button on a schedule to stop it from creating new posts. The cron will skip paused schedules. Resume anytime.</p>
+</section>
+
+<!-- ═══════════════ 8. PLANNER ═══════════════ -->
+<section id="planner">
+  <h2>8. Schedule Planner</h2>
+  <p>The AI-powered Schedule Planner lets you describe your posting needs in natural language, and it generates a structured plan with posts, dates, and optional recurring schedules.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Planner Page <span>/schedule-planner</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Schedule Planner             ║
+║  AI-powered planning          ║
+║                               ║
+║  Describe your plan:          ║
+║  ┌────────────────────────┐   ║
+║  │ I want to post about    │   ║
+║  │ FastAPI tips every      │   ║
+║  │ Mon/Wed/Fri at 9am     │   ║
+║  │ for the next 2 weeks    │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  [ Generate Plan ]            ║
+║                               ║
+║  ─── Generated Plan ───      ║
+║  ┌─ Mon 5/18 09:00 ───────┐  ║
+║  │ FastAPI tip: Path ops  │  ║
+║  │ [Edit]                 │  ║
+║  ├─ Wed 5/20 09:00 ───────┤  ║
+║  │ FastAPI tip: Depends   │  ║
+║  │ [Edit]                 │  ║
+║  └────────────────────────┘  ║
+║  [✔ Confirm & Create]       ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Example Prompts</div>
+      <div class="wf-body">
+        <ul>
+          <li>"Post about React tips every Tuesday and Thursday at 10am for 3 weeks"</li>
+          <li>"I have 12 tech posts, schedule them daily at 8am starting next Monday"</li>
+          <li>"Create a weekly series about AI tools, post every Monday/Wednesday/Friday"</li>
+          <li>"Schedule my imported drafts for the next 2 weeks at 12pm IST"</li>
+        </ul>
+        <br/>
+        <div class="note">
+          The AI considers your existing draft posts, content sources, and connected accounts to build a realistic plan. You can edit any post content before confirming.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 9. CALENDAR ═══════════════ -->
+<section id="calendar">
+  <h2>9. Calendar View</h2>
+  <p>Visual month calendar showing all scheduled and published posts. Navigate between months and click on days to see post details.</p>
+
+  <div class="wf-card">
+    <div class="wf-label">Calendar Page <span>/calendar</span></div>
+    <div class="wf-body">
+<pre>╔═══════════════════════════════════════╗
+║  Calendar    ◀ May 2026 ▶            ║
+║                                       ║
+║  Sun  Mon  Tue  Wed  Thu  Fri  Sat   ║
+║                1    2    3    4    5  ║
+║                │    │    │    │    │   ║
+║   6    7    8    9   10   11   12    ║
+║   │    │    │    │    │    │    │    ║
+║  13   14 ● 15   16   17   18   19   ║
+║   │   │●│ │    │    │    │    │    ║
+║  20   21   22   23   24   25   26   ║
+║   │    │    │    │    │    │    │    ║
+║  27   28   29   30   31             ║
+║                                       ║
+║  May 14 (3 posts):                   ║
+║  ● 08:00 Post A  [Scheduled]        ║
+║  ● 12:00 Post B  [Scheduled]        ║
+║  ● Posted Post C [Posted]           ║
+╚═══════════════════════════════════════╝</pre>
+    </div>
+  </div>
+
+  <p>Click any post to open its edit page. Color-coded pills indicate status (<span class="pill pill-scheduled">scheduled</span> vs <span class="pill pill-posted">posted</span>).</p>
+</section>
+
+<!-- ═══════════════ 10. ANALYTICS ═══════════════ -->
+<section id="analytics">
+  <h2>10. Analytics</h2>
+  <p>Track engagement metrics for your posted content — likes, comments, and engagement trends over time.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Analytics Page <span>/analytics</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Analytics  [Sync Analytics] ║
+║  Engagement metrics           ║
+║                               ║
+║  ┌──────┐ ┌──────┐ ┌──────┐  ║
+║  │Posts │ │Likes │ │Commnt│  ║
+║  │  9   │ │  42  │ │  8   │  ║
+║  └──────┘ └──────┘ └──────┘  ║
+║                               ║
+║  ─── Engagement Trend ───    ║
+║  📈 [Area Chart]             ║
+║      Likes + Comments        ║
+║      over last 15 posts      ║
+║                               ║
+║  ─── Top Posts ───           ║
+║  1. Post A   12 likes  3 cmt ║
+║  2. Post B    8 likes  1 cmt ║
+║  3. Post C    5 likes  2 cmt ║
+║                               ║
+║  ─── Metric Density ───      ║
+║  📊 [Bar Chart]              ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">How Analytics Work</div>
+      <div class="wf-body">
+        <ol>
+          <li><strong>Auto-sync:</strong> The cron's slow pipeline runs <code>runAnalyticsCycle(30)</code> at configured times — fetches engagement for up to 30 recent posted posts</li>
+          <li><strong>Manual sync:</strong> Click "Sync Analytics" on the Analytics page or use the System Tasks button on the Dashboard</li>
+          <li><strong>Data source:</strong> LinkedIn's <code>socialMetadata</code> or <code>socialActions</code> API (2-tier fallback)</li>
+          <li><strong>What's tracked:</strong> Likes, comments (impressions require restricted API scope)</li>
+        </ol>
+        <br/>
+        <div class="note warn">
+          <strong>⚠ 403 errors?</strong> Your LinkedIn OAuth token needs the <code>w_member_social_feed</code> scope. Go to the LinkedIn Developer Portal → Products → enable "Share on LinkedIn". Then disconnect and reconnect your account.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 11. AI BRIEF ═══════════════ -->
+<section id="brief">
+  <h2>11. AI Brief</h2>
+  <p>An AI-powered chat interface that summarizes your recent activity and answers questions about your posting history.</p>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">Brief Page <span>/brief</span></div>
+      <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  Activity Brief               ║
+║  AI-powered summary           ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │ 🤖 Last 7 days:       │   ║
+║  │ • 9 posts published   │   ║
+║  │ • 3 posts failed      │   ║
+║  │ • 92 scheduled        │   ║
+║  │ • Best performer:     │   ║
+║  │   "React tips" (12L)  │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  ┌────────────────────────┐   ║
+║  │ You: How many failed?  │   ║
+║  │ 🤖 3 posts failed     │   ║
+║  │ last week due to...   │   ║
+║  └────────────────────────┘   ║
+║                               ║
+║  ┌─── Type a question... ──┐  ║
+║  └─────────────────────────┘  ║
+║  [Clear History]              ║
+╚══════════════════════════════╝</pre>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Features</div>
+      <div class="wf-body">
+        <ul>
+          <li>Shows a 7-day summary on first load</li>
+          <li>Ask questions like "What posted well?", "Any failures?", "How many scheduled?"</li>
+          <li>Chat history persists in localStorage</li>
+          <li>"Clear History" button resets the conversation</li>
+          <li>Also accessible as a modal via the "Brief Me" button on the Dashboard</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ 12. LOGS ═══════════════ -->
+<section id="logs">
+  <h2>12. Audit Logs</h2>
+  <p>A complete audit trail of all system actions — post creation, publishing, schedule processing, imports, etc.</p>
+
+  <div class="wf-card">
+    <div class="wf-label">Logs Page <span>/logs</span></div>
+    <div class="wf-body">
+<pre>╔════════════════════════════════════╗
+║  Audit Trail                        ║
+║  All system events                  ║
+║                                      ║
+║  [All] [post.created(25)] [post.    ║
+║   posted(9)] [schedule.process(3)]  ║
+║                                      ║
+║  ┌─────────────────────────────────┐ ║
+║  │ ▶ post.created                  │ ║
+║  │   5/14 08:00 · source: schedule  │ ║
+║  │   {postId: "...", schedule: ".."}│ ║
+║  ├─────────────────────────────────┤ ║
+║  │ ▶ post.posted                   │ ║
+║  │   5/13 18:00 · to John Doe      │ ║
+║  │   {linkedinId: "urn:li:..."}    │ ║
+║  ├─────────────────────────────────┤ ║
+║  │ ▶ post.failed                   │ ║
+║  │   5/13 08:00 · "Token expired"  │ ║
+║  └─────────────────────────────────┘ ║
+║  ◀ 1 2 ... 5 ▶                       ║
+╚══════════════════════════════════════╝</pre>
+    </div>
+  </div>
+
+  <p><strong>Filter by action type</strong> using the chip buttons at the top. Each chip shows the count of that action. Expand entries to see full metadata (IDs, error messages, etc.). 50 entries per page.</p>
+</section>
+
+<!-- ═══════════════ 13. SETTINGS ═══════════════ -->
+<section id="settings">
+  <h2>13. Settings &amp; AI Prompts</h2>
+
+  <h3>13.1 Password</h3>
+  <p><strong>/settings</strong> — Change your login password. Requires current password for verification.</p>
+
+  <h3>13.2 AI Prompts</h3>
+  <p><strong>/settings/prompts</strong> — Customize the system prompts used by each AI agent. There are 7 agent groups:</p>
+
+  <table class="sectable">
+    <tr><th>Agent</th><th>Purpose</th></tr>
+    <tr><td>Hashtag</td><td>Generates relevant hashtags for post content</td></tr>
+    <tr><td>Refine</td><td>Polishes and improves post text</td></tr>
+    <tr><td>Expand</td><td>Elaborates on post content with more detail</td></tr>
+    <tr><td>Batch Optimize</td><td>Batch-generates hashtags for multiple posts</td></tr>
+    <tr><td>Pre-Publish</td><td>Final content check before publishing to LinkedIn</td></tr>
+    <tr><td>Brief</td><td>Generates activity summaries</td></tr>
+    <tr><td>Scheduler</td><td>Creates posting plans from natural language</td></tr>
+  </table>
+
+  <p>Each agent has a <strong>system role</strong> and an <strong>instruction</strong> field. Click "Reset to Default" to revert individual agents. Changes take effect immediately — no reload needed.</p>
+
+  <div class="wf-card">
+    <div class="wf-label">AI Prompts Page <span>/settings/prompts</span></div>
+    <div class="wf-body">
+<pre>╔══════════════════════════════╗
+║  AI Prompts                  ║
+║  Customize agent behavior     ║
+║                               ║
+║  ─── 1. Hashtag ───          ║
+║  Role:                        ║
+║  ┌────────────────────────┐   ║
+║  │ You are a hashtag...  │   ║
+║  └────────────────────────┘   ║
+║  Instruction:                 ║
+║  ┌────────────────────────┐   ║
+║  │ Generate 5 hashtags... │   ║
+║  └────────────────────────┘   ║
+║  [Reset to Default]          ║
+║                               ║
+║  ─── 2. Refine ───           ║
+║  ...                          ║
+║                               ║
+║  [Save All Changes]          ║
+╚══════════════════════════════╝</pre>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Tip:</strong> Tweaking prompts can significantly change how the AI writes. Try adjusting tone instructions ("professional", "casual", "humerous") or adding formatting rules.
+  </div>
+</section>
+
+<!-- ═══════════════ 14. STATUS LIFECYCLE ═══════════════ -->
+<section id="status-lifecycle">
+  <h2>14. Post Status Lifecycle</h2>
+
+  <p>Every post in InkPost moves through a defined lifecycle:</p>
+
+  <div class="flow">
+    <span class="step done">draft</span>
+    <span class="arrow">→</span>
+    <span class="step done">scheduled</span>
+    <span class="arrow">→</span>
+    <span class="step done">queued</span>
+    <span class="arrow">→</span>
+    <span class="step done">posting</span>
+    <span class="arrow">→</span>
+    <span class="step done">posted</span>
+  </div>
+  <div class="flow" style="margin-top: 0;">
+    <span style="min-width: 72px;"></span>
+    <span class="arrow" style="margin-left: 44px;">↘</span>
+    <span class="step done" style="border-color: #dc2626;">failed</span>
+  </div>
+
+  <table class="sectable">
+    <tr><th>Status</th><th>Meaning</th><th>What happens</th></tr>
+    <tr>
+      <td><span class="pill pill-draft">draft</span></td>
+      <td>Saved but not scheduled</td>
+      <td>Visible in Drafts tab. Can be edited, scheduled, or published manually.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-scheduled">scheduled</span></td>
+      <td>Has a future date/time</td>
+      <td>Waiting for its turn. The cron will publish at the right time. Can still be edited.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-queued">queued</span></td>
+      <td>Due and waiting to publish</td>
+      <td>The cron has picked it up but hasn't sent to LinkedIn yet. Brief transitional state.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-posting">posting</span></td>
+      <td>Currently being published</td>
+      <td>The system is sending to LinkedIn's API. Should resolve within seconds.</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-posted">posted</span></td>
+      <td>Successfully published</td>
+      <td>Live on LinkedIn. Shows link count, likes/comments (if analytics synced).</td>
+    </tr>
+    <tr>
+      <td><span class="pill pill-failed">failed</span></td>
+      <td>Publishing error</td>
+      <td>Shows error message. Common causes: token expired, content too long, API rate limit, network error.</td>
+    </tr>
+  </table>
+
+  <h3>Sources of posts</h3>
+  <table class="sectable">
+    <tr><th>Source</th><th>How created</th></tr>
+    <tr><td><code>manual</code></td><td>Created via the New Post form (includes Publish Now)</td></tr>
+    <tr><td><code>imported_asset</code></td><td>Imported from a content source (Sources page)</td></tr>
+    <tr><td><code>schedule</code></td><td>Created automatically by a recurring schedule</td></tr>
+    <tr><td><code>bulk_schedule</code></td><td>Created via the Bulk Schedule form</td></tr>
+    <tr><td><code>file</code></td><td>Legacy import from file upload</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════ 15. FAQ ═══════════════ -->
+<section id="faq">
+  <h2>15. FAQ &amp; Troubleshooting</h2>
+
+  <div class="wf-grid two">
+    <div class="wf-card">
+      <div class="wf-label">General Questions</div>
+      <div class="wf-body">
+        <h3>Why did my post fail?</h3>
+        <p>Check the post card for the error message. Common causes:</p>
+        <ul>
+          <li><strong>Token expired</strong> — Reconnect your LinkedIn account</li>
+          <li><strong>Content too long</strong> — LinkedIn limit is ~3000 characters</li>
+          <li><strong>Duplicate content</strong> — LinkedIn may reject exact repeats</li>
+          <li><strong>Rate limit</strong> — LinkedIn limits ~100 posts/day per user</li>
+        </ul>
+
+        <h3>Can I post to multiple accounts?</h3>
+        <p>Yes. The New Post form has checkboxes for each connected account. Check multiple to broadcast the same post to all of them simultaneously.</p>
+
+        <h3>How do schedules differ from scheduled posts?</h3>
+        <p>A <strong>scheduled post</strong> is a one-time post with a specific date/time. A <strong>schedule</strong> is a recurring template that creates new posts every day at your set times.</p>
+      </div>
+    </div>
+    <div class="wf-card">
+      <div class="wf-label">Issues &amp; Solutions</div>
+      <div class="wf-body">
+        <h3>Analytics show 0 for everything</h3>
+        <ol>
+          <li>Click "Sync Analytics" to trigger a manual sync</li>
+          <li>If still 0, your LinkedIn token likely lacks <code>w_member_social_feed</code> scope</li>
+          <li>Go to LinkedIn Developer Portal → Products → enable "Share on LinkedIn"</li>
+          <li>Disconnect and reconnect your account to get a fresh token</li>
+        </ol>
+
+        <h3>Schedule says "Account: None"</h3>
+        <p>Edit the schedule and select a LinkedIn account. Without an account, the cron will create posts but they won't be published.</p>
+
+        <h3>Duplicate posts being created</h3>
+        <p>The Schedule Drafts endpoint auto-deduplicates by normalized content. If you see duplicates, run "Schedule All Drafts" again — extras get removed.</p>
+
+        <h3>AI not generating content</h3>
+        <p>All AI uses free OpenCode models with automatic fallback. If generation fails, check the browser console for network errors or try again later.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  InkPost v1.0 &mdash; Built with Next.js 15 + Express.js 5 + MongoDB + LinkedIn API + OpenCode AI &mdash; Generated <span id="date"></span>
+</footer>
+
+</div><!-- /container -->
+
+<script>
+  document.getElementById('date').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+
+</body>
+</html>
