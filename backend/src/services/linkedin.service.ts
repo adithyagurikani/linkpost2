@@ -5,7 +5,7 @@ import { LinkedInTokenResponse, LinkedInUserInfo } from "../types";
 const LINKEDIN_AUTH_URL = "https://www.linkedin.com/oauth/v2/authorization";
 const LINKEDIN_TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken";
 const LINKEDIN_API_BASE = "https://api.linkedin.com";
-const SCOPES = "openid profile email w_member_social w_member_social_feed";
+const SCOPES = "openid profile email w_member_social_feed";
 
 export const LINKEDIN_MAX_CHARS = 3000;
 
